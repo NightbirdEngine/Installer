@@ -5,7 +5,7 @@
 ; Include Modern UI
 
   !include "MUI2.nsh"
-
+  
 ;--------------------------------
 ; General
 
@@ -32,7 +32,7 @@
 ; Interface Settings
 
   !define MUI_ABORTWARNING
-
+  
 ;--------------------------------
 ; Pages
 
@@ -61,12 +61,15 @@
 ; Installer Sections
 
 Section "Nightbird Engine" SecNightbird
-
+  SetRegView 64
+  
   SetOutPath "$INSTDIR\Source"
   File /r "Source\*.*"
   
   SetOutPath "$INSTDIR\Binaries"
   File /r "Binaries\*.*"
+  
+  SetOutPath "$INSTDIR\Binaries\Release-windows-x86_64"
   
   ; Store installation folder
   WriteRegStr HKLM "SOFTWARE\Nightbird" "InstallDir" $INSTDIR
@@ -84,7 +87,7 @@ Section "Nightbird Engine" SecNightbird
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
 	
 	; Create shortcuts
-	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Nightbird Editor.lnk" "$INSTDIR\Binaries\Release-windows-x86_64\Editor.exe" "" "$INSTDIR\Binaries\Release-windows-x86_64"
+	CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Nightbird Editor.lnk" "$INSTDIR\Binaries\Release-windows-x86_64\Editor.exe"
     CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
   
   !insertmacro MUI_STARTMENU_WRITE_END
@@ -106,6 +109,8 @@ SectionEnd
 ; Uninstaller Section
 
 Section "Uninstall"
+  SetRegView 64
+  
   RMDir /r "$INSTDIR"
   
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
@@ -115,5 +120,5 @@ Section "Uninstall"
   
   DeleteRegKey HKLM "SOFTWARE\Nightbird"
   DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird"
-
+  
 SectionEnd
