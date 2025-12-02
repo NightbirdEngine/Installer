@@ -18,7 +18,7 @@
   InstallDir "$PROGRAMFILES64\Nightbird"
   
   ; Get installation folder from registry if available
-  InstallDirRegKey HKCU "Software\Nightbird" "Install_Dir"
+  InstallDirRegKey HKLM "SOFTWARE\Nightbird" "InstallDir"
 
   ; Request application privileges for Windows Vista
   RequestExecutionLevel admin
@@ -41,8 +41,8 @@
   !insertmacro MUI_PAGE_DIRECTORY
   
   ; Start Menu Folder Page Configuration
-  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
-  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Nightbird"
+  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "SOFTWARE\Nightbird"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
   
   !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
@@ -69,16 +69,16 @@ Section "Nightbird Engine" SecNightbird
   File /r "Binaries\*.*"
   
   ; Store installation folder
-  WriteRegStr HKCU "Software\Nightbird" "Install_Dir" $INSTDIR
+  WriteRegStr HKLM "SOFTWARE\Nightbird" "InstallDir" $INSTDIR
   
   ; Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   
   ; Add to Add or Remove Programs
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird" "DisplayName" "Nightbird Engine"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird" "UninstallString" "$INSTDIR\Uninstall.exe"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird" "InstallLocation" "$INSTDIR"
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird" "Publisher" "Nightbird"
+  WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird" "DisplayName" "Nightbird Engine"
+  WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird" "UninstallString" "$INSTDIR\Uninstall.exe"
+  WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird" "Publisher" "Nightbird"
   
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
@@ -111,9 +111,9 @@ Section "Uninstall"
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\Nightbird Editor.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
-  RMDir "$SMPROGRAMS\$StartMenuFolder"
+  RMDir /r "$SMPROGRAMS\$StartMenuFolder"
   
-  DeleteRegKey HKCU "Software\Nightbird"
-  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird"
+  DeleteRegKey HKLM "SOFTWARE\Nightbird"
+  DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Nightbird"
 
 SectionEnd
